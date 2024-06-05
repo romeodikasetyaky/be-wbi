@@ -55,7 +55,7 @@ class AuthController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['status' => false, 'message' => 'please check your password or email/phone'], 400);
+            return response()->json(['status' => false, 'message' => 'please check your password or email', 'server_message' => 'validation failed'], 400);
         }
 
         $emailOrPhone = !empty($request->input('email_or_phone')) ? $request->input('email_or_phone') : 'XXX';
@@ -73,11 +73,13 @@ class AuthController extends Controller
                     'user_id' => $user->id,
                     'role' => $user->role,
                 ];
-                return response()->json(['status' => true, 'message' => 'Login successfully', 'data' => $data]);
+                return response()->json(['status' => true, 'message' => 'Login successfully', 'data' => $data], 200);
+            } else {
+                return response()->json(['status' => false, 'message' => 'please check email or password'], 500);
             }
         }
         catch(\Exception $e){
-            return response()->json(['status' => false, 'message' => 'please check password or email', 'server_message' => 'error sistem'], 500);
+            return response()->json(['status' => false, 'message' => 'please check password or email', 'server_message' => 'system error'], 500);
         }
     }
 }
