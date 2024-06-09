@@ -1,5 +1,9 @@
 CREATE TABLE `nar1` (
   `id` bigint NOT NULL AUTO_INCREMENT,
+  `user_id` bigint NOT NULL,
+  `user_name` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime COLLATE utf8mb4_general_ci DEFAULT NULL,
   `wq1_1_rotating_part` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `wq1_1_rotating_part_rm` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `wq1_1_hsc` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,

@@ -25,3 +25,4 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::post('/nar1', [RouteController::class, 'store_nar1']);
+Route::get('/area-nar1', [RouteController::class, 'getNarSatu']);
