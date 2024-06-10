@@ -38,4 +38,17 @@ class RouteController extends Controller
             return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
+
+    public function getDetailsNarSatu($narId) {
+        try {
+            $data = DB::table('nar1')->where('id', '=', (int) $narId)->first();
+            if ($data) {
+                return response()->json(['status' => true, 'message' => 'success ', 'data' => $data], 200);
+            } else {
+                return response()->json(['status' => false, 'message' => 'error', 'data' => $data], 500);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
 }
