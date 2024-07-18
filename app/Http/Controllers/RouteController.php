@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class RouteController extends Controller
 {
@@ -138,5 +141,164 @@ class RouteController extends Controller
         } catch (\Exception $e) {
             return response()->json(['status' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function export_rec1(Request $request) {
+        $id = $request->query('id') ?? 1;
+        $data = DB::table('rec1')->where('id', '=', (int) $id)->first();
+
+        $template_excel = app_path("Plugin/template_excel/template_rec_nar_1.xls");
+        $filename = 'Reclaimer Nar 1 - '.$id.'.xlsx';
+
+        $spreadsheet = IOFactory::load($template_excel);
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle("Reclaimer NAR 1");
+
+        $spreadsheet->getActiveSheet()->setCellValue('E3', $data->user_name);
+        $spreadsheet->getActiveSheet()->setCellValue('E4', date('d F Y H:i', strtotime($data->created_at))); // Output Sample 5 October 2024 12:30
+
+        $data_column = config('export.rec1'); // config/export.php see region rec1
+        foreach ($data as $key => $value) {
+            foreach ($data_column as $d) {
+                if ($key == $d['value']) {
+                    if ($d['type'] == 'boolean') {
+                        $spreadsheet->getActiveSheet()->setCellValue('E'.$d['key'], $value == 1 ? '1' : '0');
+                        $spreadsheet->getActiveSheet()->setCellValue('F'.$d['key'], $value == 1 ? 'Normal' : 'Tidak Normal');
+                    } elseif ($d['type'] == 'number') {
+                        $spreadsheet->getActiveSheet()->setCellValue('E'.$d['key'], $value);
+                        $spreadsheet->getActiveSheet()->setCellValue('F'.$d['key'], $value <= (int) $d['min_value'] ? 'Normal' : 'Tidak Normal');
+                    } elseif ($d['type'] == 'text') {
+                        $spreadsheet->getActiveSheet()->setCellValue('C'.$d['key'], $value);
+                    }
+                    break;
+                }
+            }
+        }
+
+        $spreadsheet->getProperties()->setCreator("WBI")
+                                     ->setLastModifiedBy("WBI")
+                                     ->setTitle("Report_Excel")
+                                     ->setSubject("Report")
+                                     ->setDescription("Report")
+                                     ->setKeywords("Report")
+                                     ->setCategory("Report");
+
+        $writer = new Xlsx($spreadsheet);
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public'); 
+
+        ob_end_clean();
+        $writer->save('php://output');
+    }
+
+    public function export_nar1(Request $request) {
+        $id = $request->query('id') ?? 1;
+        $data = DB::table('nar1')->where('id', '=', (int) $id)->first();
+
+        $template_excel = app_path("Plugin/template_excel/template_nar_1.xls");
+        $filename = 'Nar 1 - '.$id.'.xlsx';
+
+        $spreadsheet = IOFactory::load($template_excel);
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle("NAR 1");
+
+        $spreadsheet->getActiveSheet()->setCellValue('E3', $data->user_name);
+        $spreadsheet->getActiveSheet()->setCellValue('E4', date('d F Y H:i', strtotime($data->created_at))); // Output Sample 5 October 2024 12:30
+
+        $data_column = config('export.nar1'); // config/export.php see region nar1
+        foreach ($data as $key => $value) {
+            foreach ($data_column as $d) {
+                if ($key == $d['value']) {
+                    if ($d['type'] == 'boolean') {
+                        $spreadsheet->getActiveSheet()->setCellValue('E'.$d['key'], $value == 1 ? '1' : '0');
+                        $spreadsheet->getActiveSheet()->setCellValue('F'.$d['key'], $value == 1 ? 'Normal' : 'Tidak Normal');
+                    } elseif ($d['type'] == 'number') {
+                        $spreadsheet->getActiveSheet()->setCellValue('E'.$d['key'], $value);
+                        $spreadsheet->getActiveSheet()->setCellValue('F'.$d['key'], $value <= (int) $d['min_value'] ? 'Normal' : 'Tidak Normal');
+                    } elseif ($d['type'] == 'text') {
+                        $spreadsheet->getActiveSheet()->setCellValue('C'.$d['key'], $value);
+                    }
+                    break;
+                }
+            }
+        }
+
+        $spreadsheet->getProperties()->setCreator("WBI")
+                                     ->setLastModifiedBy("WBI")
+                                     ->setTitle("Report_Excel")
+                                     ->setSubject("Report")
+                                     ->setDescription("Report")
+                                     ->setKeywords("Report")
+                                     ->setCategory("Report");
+
+        $writer = new Xlsx($spreadsheet);
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public'); 
+
+        ob_end_clean();
+        $writer->save('php://output');
+    }
+
+    public function export_nar1a(Request $request) {
+        $id = $request->query('id') ?? 1;
+        $data = DB::table('nar1a')->where('id', '=', (int) $id)->first();
+
+        $template_excel = app_path("Plugin/template_excel/template_nar_1a.xls");
+        $filename = 'Nar 1A - '.$id.'.xlsx';
+
+        $spreadsheet = IOFactory::load($template_excel);
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle("NAR 1A");
+
+        $spreadsheet->getActiveSheet()->setCellValue('E3', $data->user_name);
+        $spreadsheet->getActiveSheet()->setCellValue('E4', date('d F Y H:i', strtotime($data->created_at))); // Output Sample 5 October 2024 12:30
+
+        $data_column = config('export.nar1a'); // config/export.php see region nar1a
+        foreach ($data as $key => $value) {
+            foreach ($data_column as $d) {
+                if ($key == $d['value']) {
+                    if ($d['type'] == 'boolean') {
+                        $spreadsheet->getActiveSheet()->setCellValue('E'.$d['key'], $value == 1 ? '1' : '0');
+                        $spreadsheet->getActiveSheet()->setCellValue('F'.$d['key'], $value == 1 ? 'Normal' : 'Tidak Normal');
+                    } elseif ($d['type'] == 'number') {
+                        $spreadsheet->getActiveSheet()->setCellValue('E'.$d['key'], $value);
+                        $spreadsheet->getActiveSheet()->setCellValue('F'.$d['key'], $value <= (int) $d['min_value'] ? 'Normal' : 'Tidak Normal');
+                    } elseif ($d['type'] == 'text') {
+                        $spreadsheet->getActiveSheet()->setCellValue('C'.$d['key'], $value);
+                    }
+                    break;
+                }
+            }
+        }
+
+        $spreadsheet->getProperties()->setCreator("WBI")
+                                     ->setLastModifiedBy("WBI")
+                                     ->setTitle("Report_Excel")
+                                     ->setSubject("Report")
+                                     ->setDescription("Report")
+                                     ->setKeywords("Report")
+                                     ->setCategory("Report");
+
+        $writer = new Xlsx($spreadsheet);
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'"');
+        header('Cache-Control: max-age=0');
+        header('Content-Transfer-Encoding: binary');
+        header('Cache-Control: cache, must-revalidate');
+        header('Pragma: public'); 
+
+        ob_end_clean();
+        $writer->save('php://output');
     }
 }

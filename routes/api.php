@@ -36,3 +36,7 @@ Route::get('/nar1a/{id}', [RouteController::class, 'getDetailsNarSatuA']);
 Route::post('/rec1', [RouteController::class, 'store_rec1']);
 Route::get('/area-rec1', [RouteController::class, 'getRecSatu']);
 Route::get('/rec1/{id}', [RouteController::class, 'getDetailsRecSatu']);
+
+Route::get('/export-rec1', [RouteController::class, 'export_rec1']);
+Route::get('/export-nar1', [RouteController::class, 'export_nar1']);
+Route::get('/export-nar1a', [RouteController::class, 'export_nar1a']);
